@@ -20,7 +20,12 @@ namespace FlightForYou.API.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// Adiciona uma passagem para ser comprada por algum usuário
+        /// </summary>
+        /// <param name="passagemdto">Objeto necessário para criação de uma passagem no banco de dados</param>
+        /// <returns></returns>
+        /// <response code="201">Caso a criação seja realizada com sucesso</response>
         [HttpPost]
         public IActionResult AddPassagem([FromBody] PassagemDto passagemdto)
         {
@@ -31,6 +36,24 @@ namespace FlightForYou.API.Controllers
                 new { id = passagem.Id },
                 passagem);
             
+        }
+
+        /// <summary>
+        /// Remove uma passagem adicionada que poderia ser comprada por algum usuário
+        /// </summary>
+        /// <param name="id">Id da passagem que será deletada</param>
+        /// <returns></returns>
+        /// <response code="200">Caso o delete seja feito com sucesso</response>
+        [HttpDelete("{id}")]
+        public IActionResult DeletePassagem(int id)
+        {
+            var passagem = _context.Passagens.FirstOrDefault(p => p.Id == id);
+            if (passagem == null)
+                return NotFound();
+
+            _context.Remove(passagem);
+            _context.SaveChanges();
+            return NoContent(); 
         }
 
         [HttpGet("{id}")]
@@ -44,5 +67,7 @@ namespace FlightForYou.API.Controllers
             return Ok(passagemDto);
 
         }
+
+
     }
 }
