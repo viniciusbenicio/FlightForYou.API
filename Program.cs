@@ -1,4 +1,16 @@
+using FlightForYou.API.Data;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<PassagemContext>(opts =>
+                                            opts.UseLazyLoadingProxies()
+                                                .UseSqlServer(builder.Configuration.GetConnectionString("PassagemConnection")));
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 // Add services to the container.
 
